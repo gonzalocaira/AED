@@ -5,7 +5,7 @@ using namespace std;
 template <typename T>
 
 class Nodo{
-private:
+public:
   T m_dato;
   Nodo<T> *p_sig;
 public:
@@ -28,10 +28,11 @@ public:
   }
   bool find(T d);
   bool find_recursivo(T d);
-  bool Add(T d);
+  bool add(T d);
   bool find_recursivo(T d,Nodo<T> *p);
   bool isEmpty();
   bool delete_from();
+  void mostrar();
 };
 
 template <typename T>
@@ -74,8 +75,43 @@ bool List<T>::delete_from(){
   return true;
 }
 
+template <typename T>
+void List<T>::mostrar(){
+  Nodo<T> *aux= p_head;
+  if(isEmpty())
+    cout<<"vacio"<<endl;
+  else{
+    while(aux!=NULL){
+      cout<<aux->m_dato<<endl;
+      aux=aux->p_sig;
+    }
+    cout<<endl;
+  }
 
+}
+
+template <typename T>
+bool List<T>::add(T d){
+  Nodo<T> *nuevo = new Nodo<T>(d);
+  if(isEmpty()){
+    p_head= nuevo;
+    p_last= nuevo;
+    return true;
+  }
+  else{
+    p_last->p_sig =nuevo;
+    p_last= nuevo;
+    return true;
+  }
+  return false;
+}
+//COdigo DE CC2
 int main(){
-  List<int> lista();
+  List<int> lista;
+  lista.add(1);
+  lista.add(2);
+  lista.add(3);
+  lista.mostrar();
+
   return 0;
 }
