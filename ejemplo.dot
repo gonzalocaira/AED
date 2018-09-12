@@ -1,0 +1,16 @@
+/*Esto es un comentario*/
+graph nombre_del_grafo {
+    "idNodo1";
+    "idNodo2"; /*estos son identificadores de nodos*/
+    "idNodo3";
+    "idNodo4";
+    "idNodo1" -- "idNodo2";
+    "idNodo1" -- "idNodo3"; /*estas son relaciones entre nodos*/
+    "idNodo3" -- "idNodo1";
+    "idNodo3" -- "idNodo2";
+    
+}
+/*
+mogrify -resize 640x480 *.jpg *.png # Esto es para redimensionar las imágenes al mismo tamaño
+convert -delay 20 -loop 0 *.jpg *.png migif.gif #Delay representa el tiempo de retraso
+*/
