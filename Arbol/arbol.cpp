@@ -1,5 +1,6 @@
 #include "arbol.h"
 
+
 template <typename T>
 bool Tree<T>::find_R(T d,Nodo<T> *p){
   if(!p)return false;
@@ -37,6 +38,10 @@ bool Tree<T>::add_R(T d,Nodo<T> *&p){
       if(p->m_dato==d) return false;
       return add_R(d,p->m_pSon[p->m_dato<d]);
 }
+template <typename T>
+void Tree<T>::add(T d){
+  add_R(d,m_pRoot);
+}
 /*
 template <typename T>
 void Tree<T>::add_I(T d){
@@ -56,6 +61,7 @@ template <typename T>
 bool Tree<T>::find_E(T d,Nodo<T> **&p){
   p=&m_pRoot;
   while(*p){
+
     if((*p)->m_dato==d) return true;
     p=&((*p)->m_pSon[(*p)->m_dato<d]);
   }
@@ -96,27 +102,100 @@ void Tree<T>::show(int q){
 template <typename T>
 void Tree<T>::add_I(T d){
   Nodo<T> **q;
+  //if(m_pRoot==NULL)m_pRoot=*q;
   if(find_E(d,q))return;
   *q=new Nodo<T>(d);
 }
-/*
+
+template<typename T>
+int Tree<T>::altitude_R(Nodo<T> *p){
+  if(!p)return 0;
+  return max(altitude_R(p->m_pSon[0])+1,altitude_R(p->m_pSon[1])+1);
+}
+
 template <typename T>
-bool Tree<T>::add(T d){
-  Nodo <T> *nuevo=new Nodo<T>(d);
-  Nodo <T> *tmp = m_pRoot;
-  if(!tmp){m_pRoot = nuevo; return true;}
-  else{
-    while(tmp){
-      if()
-    }
-  }
+void Tree<T>::altitude()
+{
+  cout<<altitude_R(m_pRoot);
+}
+
+template <typename T>
+void Tree<T>::print_R(Nodo <T> *p,ostream &os){
+  if(!p){return ;}
+  print_R(p->m_pSon[0],os);
+  os<<p->m_dato<<" ";
+  print_R(p->m_pSon[1],os);
+}
+template <typename T>
+void Tree<T>::lectura() {
+
+      FILE *archivo,*archivo2;
+      //File *archivo2;
+
+      char caracteres[100];
+
+      archivo = fopen("English.txt","r");
+      archivo2 = fopen("Spanish.txt","r");
+      if (archivo == NULL)
+        exit(1);
+      else
+            {
+        //  cout<<"\nEl contenido del archivo de prueba es \n\n";
+          while (feof(archivo) == 0)
+          {
+        fgets(caracteres,100,archivo);
+        //add_I(caracteres);
+        cout<<caracteres;
+        add(caracteres);
+          }
+          char c[]={"nether"};
+          //cout<<find(c);
+            }
+            fclose(archivo);
+}
+
+
+/*
+void Tree<T>::lectura(){
+        string contenido;
+        string contenido2;
+        cout << "Ingresa el nombre del archivo que quieres leer(sin el .txt): ";
+        cin.ignore();
+        getline(cin, contenido2);
+        contenido2 += ".txt";
+        ifstream fs(contenido2.c_str(), ios:: in );
+        char linea[128];
+        long contador = 0L;
+        if (fs.fail())
+          cerr << "El fichero no existe" << endl;
+        else
+          while (!fs.eof()) {
+            fs.getline(linea, sizeof(linea));
+            cout << linea << endl;
+            if ((++contador % 24) == 0) {
+              cout << "continuar...";
+              cin.get();
+            }
+          }
+fs.close();
 }*/
 int main(int argc, char const *argv[]) {
   /* code */
-  Tree<int> Binary;
-  Binary.add_I(2);Binary.add_I(2);Binary.add_I(4);
-  Binary.show(1);
+  Tree<char*> Binary;
+  //Binary.add_I(a);
+  //Binary.add_I(3);
+  //Binary.add_I(1);
+  //Binary.add_I(5);
+  //Binary.add_I(4);
+  //Binary.show(1);
 
+  Binary.lectura();
+  //Binary.show(1);
+  //char palabra[]={"hello"};
+  //Binary.find(palabra);
+  //Binary.altitude();
+  ofstream F("file.txt");
+  F<<Binary;
 
   return 0;
 }

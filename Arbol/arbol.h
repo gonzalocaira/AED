@@ -1,4 +1,11 @@
 #include "iostream"
+#include "stdlib.h"
+#include "string.h"
+#include <algorithm>
+#include <fstream>
+#include <stdio.h>
+
+
 
 using namespace std;
 
@@ -6,6 +13,7 @@ template <typename T>
 class Nodo{
 public:
   Nodo<T> *m_pSon[2];
+  //char caracteres[100];
   T m_dato;
 public:
   Nodo(T d){
@@ -30,6 +38,19 @@ public:
   bool find_E(T d,Nodo<T> **&p);
   bool find_I(T d,Nodo<T> *p);
   void add_I(T d);
-
-
+  void add(T d);
+  int altitude_R(Nodo<T> *p);
+  void altitude();
+  void print_R(Nodo<T> *p,ostream &os);
+  void lectura();
+  friend Tree<T> & operator<<(Tree<T> & L, T d)
+  {
+      L.add_I(d);
+      return L;
+  }
+  friend ostream & operator<<(ostream & os, Tree<T> & L)
+   {
+       L.print_R(L.m_pRoot,os);
+       return os;
+   }
 };
