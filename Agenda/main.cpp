@@ -159,10 +159,10 @@ class Agenda
 
 int main(int argc, char const *argv[]) {
   Agenda<string> A;
-  RenderWindow window(VideoMode(600,600),"Phonebook :D");
+  RenderWindow window(VideoMode(500,400),"Phonebook :D");
   Menu menu(window.getSize().x,window.getSize().y);
   Font font2;
-  if(!font2.loadFromFile("Echomotors Script Demo.ttf")){
+  if(!font2.loadFromFile("Bafora Regular Demo.ttf")){
     cout<<"Error loading file"<<endl;
   }
 
@@ -174,15 +174,16 @@ int main(int argc, char const *argv[]) {
 
   Text text2;
   text2.setFont(font2);
-  text2.setString("Phonebook!");
+  text2.setString("Stopwords!");
   text2.setCharacterSize(100);
   text2.setPosition(100,20);
   text2.setFillColor(Color::Blue);
-  text2.setStyle(Text::Style::Bold | Text::Style::Underlined);
+  /*text2.setStyle(Text::Style::Bold | Text::Style::Underlined);
   text2.setOutlineColor(Color::Cyan);
-  text2.setOutlineThickness(-10);
+  text2.setOutlineThickness(-10);*/
   while(window.isOpen()){
     Event event;
+		//window.draw(menu.get_sprite());
     while (window.pollEvent(event)) {
       if (event.type == sf::Event::TextEntered){
           if(event.text.unicode < 128){
@@ -203,33 +204,18 @@ int main(int argc, char const *argv[]) {
              case Keyboard::Return:
                 switch (menu.GetPressedItem()) {
                   case 0:
-                    cout<<"Next"<<endl;
+                  //  cout<<"Next"<<endl;
                     A.print();
                     break;
                   case 1:
-                    cout<<"Preview"<<endl;
+                    //cout<<"Preview"<<endl;
                     A.print();
                     break;
                   case 2:
-                    cout<<"Begin"<<endl;
+                    //cout<<"Begin"<<endl;
                     A.print_Begin();
                     break;
                   case 3:
-                    cout<<"Last"<<endl;
-                    A.print_Last();
-                    break;
-                  case 4:
-                    cout<<"Add"<<endl;
-                    A.AddE("73484561","Jose","arequipa","451234","12");
-                    A.AddE("71891123","Maria","lima","451223","23");
-                    A.AddE("71651321","Luis","junin","789465","15");
-                    A.AddE("78642133","Pepe","moquegua","245123","21");
-                    break;
-                  case 5:
-                    cout<<"Delete"<<endl;
-                    A.Remove();
-                    break;
-                  case 6:
                     window.close();
                     break;
                 }
