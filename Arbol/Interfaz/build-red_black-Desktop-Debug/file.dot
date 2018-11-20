@@ -1,0 +1,32 @@
+digraph structs {
+node [shape=record];
+structNodo3[style=filled ,fillcolor=grey26 label=3];
+structNodo1[style=filled ,fillcolor=grey26 label=1];
+structNodo-5[style=filled ,fillcolor=red label=-5];
+structNULLL-5[style=filled ,fillcolor=grey26 label=vacio];
+structNodo-5->structNULLL-5;
+structNULLR-5[style=filled ,fillcolor=grey26 label=vacio];
+structNodo-5->structNULLR-5;
+structNodo1->structNodo-5;
+structNodo2[style=filled ,fillcolor=red label=2];
+structNULLL2[style=filled ,fillcolor=grey26 label=vacio];
+structNodo2->structNULLL2;
+structNULLR2[style=filled ,fillcolor=grey26 label=vacio];
+structNodo2->structNULLR2;
+structNodo1->structNodo2;
+structNodo3->structNodo1;
+structNodo5[style=filled ,fillcolor=grey26 label=5];
+structNodo4[style=filled ,fillcolor=red label=4];
+structNULLL4[style=filled ,fillcolor=grey26 label=vacio];
+structNodo4->structNULLL4;
+structNULLR4[style=filled ,fillcolor=grey26 label=vacio];
+structNodo4->structNULLR4;
+structNodo5->structNodo4;
+structNodo7[style=filled ,fillcolor=red label=7];
+structNULLL7[style=filled ,fillcolor=grey26 label=vacio];
+structNodo7->structNULLL7;
+structNULLR7[style=filled ,fillcolor=grey26 label=vacio];
+structNodo7->structNULLR7;
+structNodo5->structNodo7;
+structNodo3->structNodo5;
+}

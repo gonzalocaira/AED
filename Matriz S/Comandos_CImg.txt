@@ -1,0 +1,2 @@
+﻿g++ pro.cpp -lX11 -lpthread
+./a.out

@@ -110,7 +110,7 @@ void Tree<T>::add_I(T d){
 template<typename T>
 int Tree<T>::altitude_R(Nodo<T> *p){
   if(!p)return 0;
-  return max(altitude_R(p->m_pSon[0])+1,altitude_R(p->m_pSon[1])+1);
+  return max(altitude_R(p->m_pSon[0]),altitude_R(p->m_pSon[1]))+1;
 }
 
 template <typename T>
@@ -181,21 +181,21 @@ fs.close();
 }*/
 int main(int argc, char const *argv[]) {
   /* code */
-  Tree<char*> Binary;
+  Tree<int > Binary;
   //Binary.add_I(a);
-  //Binary.add_I(3);
-  //Binary.add_I(1);
-  //Binary.add_I(5);
-  //Binary.add_I(4);
-  //Binary.show(1);
+  Binary.add_I(3);
+  Binary.add_I(1);
+  Binary.add_I(5);
+  Binary.add_I(4);
+  Binary.show(1);
 
-  Binary.lectura();
+  //Binary.lectura();
   //Binary.show(1);
   //char palabra[]={"hello"};
   //Binary.find(palabra);
-  //Binary.altitude();
-  ofstream F("file.txt");
-  F<<Binary;
+  Binary.altitude();
+  //ofstream F("file.txt");
+  //F<<Binary;
 
   return 0;
 }

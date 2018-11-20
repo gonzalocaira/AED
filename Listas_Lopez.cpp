@@ -6,10 +6,10 @@ using namespace std;
 
 template<class T>
 class Nodo
-{   
+{
 	 public:
 	 	 T      m_Dato;
-	 	 Nodo<T> * m_pSig; 
+	 	 Nodo<T> * m_pSig;
 
 	 public:
 	 	Nodo(T d):m_Dato(d),m_pSig(0){};
@@ -17,7 +17,7 @@ class Nodo
 
 template<class T>
 class Lista
-{  
+{
     public:
         Nodo<T> *  m_pHead;
     public:
@@ -27,7 +27,7 @@ class Lista
        {
        	   if(!p){return false;}
        	   if (p->m_Dato == d) {return true;}
-       	   return find_R(d,p->m_pSig);  
+       	   return find_R(d,p->m_pSig);
 
        }
 
@@ -35,7 +35,7 @@ class Lista
        void Add_R(T  d, Nodo<T> * &  p)
        {
        	   if(!p){p = new Nodo<T>(d); return; }
-       	   return Add_R(d,p->m_pSig);  
+       	   return Add_R(d,p->m_pSig);
 
        }
        void Add(T d)
@@ -46,7 +46,7 @@ class Lista
        {
        	   if(!p){return ;}
        	   os<<p->m_Dato<<endl;
-       	   return print_R(p->m_pSig,os);  
+       	   return print_R(p->m_pSig,os);
 
        }
 
@@ -56,12 +56,12 @@ class Lista
        	 if(!m_pHead)
          {
             m_pHead = pNuevo;
-            return;	
+            return;
          }
          Nodo<T> * tmp = m_pHead;
          for( ; tmp->m_pSig; tmp=tmp->m_pSig);
-         tmp->m_pSig = pNuevo;	
-         
+         tmp->m_pSig = pNuevo;
+
 
        }
 
@@ -112,16 +112,8 @@ class Lista
 };
 int main()
 {
-
-    ofstream F("file.txt");  
 	Lista<int>  A;
 	A<<3<<45<<65;
 	cout<<A;
-	F<<A;
-
-	
+	return 1;
 }
-
-
-
-
