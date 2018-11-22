@@ -1,9 +1,3 @@
-//AED - 2018 CS UNSA
-//Binomial_Heap
-//Diego Antoni Gutierrez Gutierrez
-//Vicente
-
-
 
 #include <iostream>
 #include <list>
@@ -11,22 +5,22 @@
 #include <math.h>
 #include <fstream>
 #include <stdlib.h>
-
+#include <iterator>
 
 using namespace std;
 
 
 template <class T>
-class BinomialNode
+class Nodo
 {
 public:
-	int 				 m_Grado;
-	T 					 m_Dato;
-	list<BinomialNode* > m_Hijos;
-	BinomialNode<T>* 	 m_pPadre;
+	int m_Grado;
+	T 	m_Dato;
+	list<Nodo* > m_Hijos;
+	Nodo<T>* 	 m_pPadre;
 
 public:
-	BinomialNode(T _Dato){
+	Nodo(T _Dato){
 		this->m_Dato   = _Dato;
 		this->m_Grado  = 0;
 		this->m_pPadre = NULL; 
@@ -37,34 +31,34 @@ template<class T>
 class BinomialHeap
 {
 public:
-	BinomialNode<T >*  		_vmin; 
-	list<BinomialNode<T>* > m_Roots;
+	Nodo<T >*  m_min; 
+	list<Nodo<T>* > m_Roots;
 public:
 	BinomialHeap(){
-		this->_vmin = NULL;
+		this->m_min = NULL;
 	}
 	void ADD(T _d)
 	{
-		BinomialNode<T>* _nuevoN  = new BinomialNode<T>(_d);
+		Nodo<T>* _nuevoN  = new Nodo<T>(_d);
 		this->m_Roots.insert(this->m_Roots.begin(),_nuevoN);
 		if(this->m_Roots.size()>= 2)
 		{
 			Merge();
-			Actualizar_min(_vmin,_nuevoN);
+			Actualizar_min(m_min,_nuevoN);
 
 		}else{
-			_vmin = _nuevoN;
+			m_min = _nuevoN;
 		}
 	}
-	void  Actualizar_min(BinomialNode<T>* aux,BinomialNode<T>* aux2)
+	void  Actualizar_min(Nodo<T>* aux,Nodo<T>* aux2)
 	{
-        if(aux->dato<aux2->dato)
+        if(aux->m_Dato<aux2->m_Dato)
         {
-            this->_vmin=aux;
-        }else{this->_vmin=aux2;}		
+            this->m_min=aux;
+        }else{this->m_min=aux2;}		
 
 	}
-	BinomialNode<T> * Union_Bn(BinomialNode<T>*p,BinomialNode<T>*q)
+	Nodo<T> * Union_Bn(Nodo<T>*p,Nodo<T>*q)
 	{
 		if(p->m_Dato < q->m_Dato){
 			p->m_Hijos.push_front(q);
@@ -86,8 +80,8 @@ public:
 	}
 	void Merge()
 	{
-		typename list<BinomialNode<T>*>::iterator it  = this->m_Roots.begin();
-		vector<BinomialNode<T>* > Vector_Grados;
+		list<Nodo<T>*>::iterator it  = this->m_Roots.begin();
+		vector<Nodo<T>* > Vector_Grados;
 		for(int i = 0;i<=m_Roots.size()+1;i++){
 			Vector_Grados.push_back(0);
 		}
@@ -100,9 +94,9 @@ public:
 				it ++; 
 			}
 			else{
-				BinomialNode<T>* temp = *it;
+				Nodo<T>* temp = *it;
 				it++;
-				BinomialNode<T>* m_menor = Union_Bn(temp,Vector_Grados[temp->m_Grado]);
+				Nodo<T>* m_menor = Union_Bn(temp,Vector_Grados[temp->m_Grado]);
 				Vector_Grados[p] = 0;
 				if(Vector_Grados[m_menor->m_Grado] == 0){
 					Vector_Grados[m_menor->m_Grado] = m_menor;
@@ -121,7 +115,7 @@ public:
  		string name = "Binomial";
  		ofstream file("Binomial.dot");
  		file<<"digraph {\n";
- 		typename list<BinomialNode<T>* >:: iterator it = this->m_Roots.begin();
+ 		typename list<Nodo<T>* >:: iterator it = this->m_Roots.begin();
  		for(;it!=this->m_Roots.end();it++)
  		{
  			if((*it)->m_Hijos.empty())
@@ -142,12 +136,15 @@ public:
 		system(c);	
 
  	}
- 	void Graficar_Hijos(BinomialNode<T> * aux, ofstream &file)
+ 	void Graficar_Hijos(Nodo<T> * aux, ofstream &file)
  	{
 
- 		typename list<BinomialNode<T>* >:: iterator it = aux->m_Hijos.begin();
+ 		typename list<Nodo<T>* >:: iterator it = aux->m_Hijos.begin();
  		for(;it!=aux->m_Hijos.end();it++)
+
  		{
+			 //os<<"structNodo"<<temp<<"[style=filled , label="<<p->dato<<"];"<<endl;
+			//file<<"structNodo"<<aux->m_Dato<<"[style=filled , label="<<(*it)->m_Dato<<"];"<<endl;
  			file<<aux->m_Dato<<"->"<<(*it)->m_Dato<<";\n";
  			Graficar_Hijos(*it,file);
  		}
@@ -158,21 +155,27 @@ public:
 
 int main()
 {
-	BinomialHeap<int> BH;
-	BH.ADD(3);
-	BH.ADD(5);
-	BH.ADD(6);
-	BH.ADD(7);
-	BH.ADD(1);
-	BH.ADD(9);
-	BH.ADD(10);
-	BH.ADD(11);
-	BH.ADD(15);
-	BH.ADD(16);
-	BH.ADD(18);
-	BH.ADD(21);
-//	BH.ADD(9);
-	BH.Graficar_roots();
+	BinomialHeap<int> A;
+	A.ADD(3);
+	A.ADD(5);
+	A.ADD(6);
+	A.ADD(7);
+	A.ADD(1);
+	A.ADD(9);
+	A.ADD(10);
+	A.ADD(11);
+	A.ADD(15);
+	A.ADD(16);
+	A.ADD(18);
+	A.ADD(21);
+//	A.ADD(9);
+//	A.ADD(2);
+//	A.ADD(22);
+//	A.ADD(17);
+//	A.ADD(8);
+//	A.ADD(4);
+	
+	A.Graficar_roots();
 	return 0;
 }
 
