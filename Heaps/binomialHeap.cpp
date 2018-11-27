@@ -180,7 +180,7 @@ void BinomialHeap<T>::graph_image(){
 
  		file<<"}";
  		file.close();
- 		string comando = "dot -Tpdf " + title + ".dot -o" + title + ".pdf";
+ 		string comando = "dot -Tpng " + title + ".dot -o" + title + ".png";
 		const char * c  =  comando.c_str();
 		system(c);
 }
@@ -197,16 +197,12 @@ void BinomialHeap<T>::graph_(BinomialNode<T> * aux, ofstream &file){
 }
 int main(){
     BinomialHeap<int> Bh;
-    Bh.insert_(1);
-    Bh.insert_(2);
-    Bh.insert_(3);
-    Bh.insert_(4);
-    Bh.insert_(5);
-    Bh.insert_(6);
-    Bh.insert_(7);
-    Bh.insert_(23);
-    Bh.insert_(15);
-    
+    //Bh.insert_(1);
+    int n = 1000;
+    for(int i=0;i<n;i++)
+    Bh.insert_(i);
+    //Bh.insert_(15);
+    Bh.deletemin();
     Bh.graph_image();
 
     /*Bh.print(Bh.roots);
