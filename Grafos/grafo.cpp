@@ -3,6 +3,7 @@
 #include <fstream>
 #include <stdlib.h>
 #include <string>
+#include <vector>
 using namespace std;
 
 template <class V,class E>
@@ -11,29 +12,29 @@ class Vertex;
 template<class V,class E>
 class Arista {
 public:
-  E m_dista;
+  E m_distancia;
   Vertex<V,E> m_destino;
 public:
   Arista();
   Arista (E d);
-  E get_distancia(){return m_dista;}
+  E get_distancia(){return m_distancia;}
   bool operator==(const Arista<V,E> &a){
-    return m_dista==a.m_dista;}
+    return m_distancia==a.m_distancia;}
   bool operator>(const Arista<V,E> &a){
-    return m_dista>a.m_dista;}
+    return m_distancia>a.m_distancia;}
   bool operator<(const Arista<V,E> &a){
-    return m_dista<a.m_dista;}
+    return m_distancia<a.m_distancia;}
   friend std::ostream& operator<<(std::ostream &out,const Arista<V,E> &a){
-    out<<a.m_dista;
+    out<<a.m_distancia;
     return out;}
 };
 template<class V,class E>
 Arista<V,E>::Arista(){
-  this->m_dista=0;
+  this->m_distancia=0;
 }
 template<class V,class E>
 Arista<V,E>::Arista(E d){
-  this->m_dista=d;
+  this->m_distancia=d;
 }
 
 template<class V,class E>
@@ -67,41 +68,87 @@ template<class V,class E>
 class Graph
 {
 private:
-    List<Vertex<V,E>> m_g;
+    const int INF = numeric_limits<int>::max();
+    int cantidad_nodos;
+    vector< vector<int> > ady; 
+    List<Vertex<V,E>> m_lista_grafo;
 public:
     Graph(){};
+    Graph(int nodes){
+        cantidad_nodos = nodes;
+        ady = vector< vector<int> > (cn);
+
+        for(int i = 0; i < cn; i++)
+            ady[i] = vector<int> (cn, INF);
+    }
     void add_Vertex(V v1){
-        m_g.add(Vertex<V,E>(v1));
+        m_lista_grafo.add(Vertex<V,E>(v1));
     }
     bool add_Arista(V v1,V v2,E A){
         Nodo<Vertex<V,E>> **p;
         Nodo<Vertex<V,E>> **q;
-        bool o1=m_g.find(Vertex<V,E>(v1),p);
-        bool o2=m_g.find(Vertex<V,E>(v2),q);
+        bool o1=m_lista_grafo.find(Vertex<V,E>(v1),p);
+        bool o2=m_lista_grafo.find(Vertex<V,E>(v2),q);
         if(o1==true && o2==true){
-            Arista<V,E> ari=Arista<V,E>(A);
-            ari.m_destino=(*q)->m_Dato;
-            ((*p)->m_Dato.m_Aristas).add(ari);
+            Arista<V,E> aux=Arista<V,E>(A);
+            aux.m_destino=(*q)->m_Dato;
+            ((*p)->m_Dato.m_Aristas).add(aux);
             return true;
         }
         return false;
+    }
+    vector <vector<int> > prim(){
+        // uso una copia de ady porque necesito eliminar columnas
+    vector< vector<int> > adyacencia = this->ady;
+    vector< vector<int> > arbol(cn);
+    vector<int> markedLines;
+    vector<int> :: iterator itVec;
+
+    // Inicializo las distancias del arbol en INF.
+    for(int i = 0; i < cn; i++)
+        arbol[i] = vector<int> (cn, INF);
+
+    int padre = 0;
+    int hijo = 0;
+    while(markedLines.size() + 1 < cn){
+        padre = hijo;
+        // Marco la fila y elimino la columna del nodo padre.
+        markedLines.push_back(padre);
+        for(int i = 0; i < cn; i++)
+            adyacencia[i][padre] = INF;
+
+        // Encuentro la menor distancia entre las filas marcadas.
+        // El nodo padre es la linea marcada y el nodo hijo es la columna del minimo.
+        int min = INF;
+        for(itVec = markedLines.begin(); itVec != markedLines.end(); itVec++)
+            for(int i = 0; i < cn; i++)
+                if(min > adyacencia[*itVec][i]){
+                    min = adyacencia[*itVec][i];
+                    padre = *itVec;
+                    hijo = i;
+                }
+
+        arbol[padre][hijo] = min;
+        arbol[hijo][padre] = min;
+    }
+    return arbol;
     }
     void GraphViz(){
         string title = "Grafo";
  		ofstream archivo("Grafo.dot");
         
         archivo<<"digraph Grafo {"<<endl;
-        if(!m_g.is_empty()){
+        if(!m_lista_grafo.is_empty()){
             Nodo<Vertex<V,E>> *temp;
-            temp=m_g.m_pHead;
+            temp=m_lista_grafo.m_pHead;
             while(temp!=NULL){
                 archivo<<(temp->m_Dato).m_dato<<"[label="<<"\""<<(temp->m_Dato).m_dato<<"\""<<"]"<<endl;
                 temp=temp->m_pSig;
             }
-            temp=m_g.m_pHead;
+            temp=m_lista_grafo.m_pHead;
             while(temp!=NULL){
                 Nodo<Vertex<V,E>> **p;
-                bool o1=m_g.find(Vertex<V,E>((temp->m_Dato).m_dato),p);
+                bool o1=m_lista_grafo.find(Vertex<V,E>((temp->m_Dato).m_dato),p);
                     if(o1){
                             List<Arista<V,E>> temp2;
                             Nodo<Arista<V,E>> *temp3;
@@ -109,7 +156,7 @@ public:
                             temp3=temp2.m_pHead;
                             while(temp3!=temp2.m_pLast){
                                 archivo<<" "<<(temp->m_Dato).m_dato<<" -> "<<((temp3->m_Dato).m_destino).m_dato<<"[label="<<"\""
-                                <<(temp3->m_Dato).m_dista<<"\""<<",weight="<<"\""<<(temp3->m_Dato).m_dista<<"\""<<" color=\"green\""<<"]"<<endl;
+                                <<(temp3->m_Dato).m_distancia<<"\""<<",weight="<<"\""<<(temp3->m_Dato).m_distancia<<"\""<<" color=\"green\""<<"]"<<endl;
                                 temp3=temp3->m_pSig;
                             }
                     }
@@ -136,6 +183,10 @@ int main(){
     A.add_Vertex("Colombia");
     A.add_Vertex("Alemania");
     A.add_Vertex("Francia");
+    A.add_Vertex("Paraguay");
+    A.add_Vertex("Canada");
+    A.add_Vertex("Ecuador");
+    A.add_Vertex("Portugal");
     A.add_Arista("Francia","Peru",55000);
     A.add_Arista("Alemania","Colombia",54000);
     A.add_Arista("Argentina","Francia",50000);
@@ -147,6 +198,11 @@ int main(){
     A.add_Arista("Bolivia","Brasil",15000);
     A.add_Arista("Peru","Brasil",20000);
     A.add_Arista("Alemania","Francia",15000);
+    A.add_Arista("Paraguay","Ecuador",42000);
+    A.add_Arista("Paraguay","Colombia",47000);
+    A.add_Arista("Bolivia","Canada",18000);
+    A.add_Arista("Ecuador","Brasil",28000);
+    A.add_Arista("Alemania","Portugal",17000);
     A.GraphViz();
     return 0;
 }
